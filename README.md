@@ -1,4 +1,4 @@
-# simplest-pubsub-ever
+# SimplestPubSubEver
 A super simple, lightweight, and fast PubSub pattern for Unity.
 
 ### Import Package
@@ -10,7 +10,7 @@ Window > Package Manager > (+) Plus Button > Add Package form git Url
 git URL:
 
 ```
-https://github.com/hieki-chan/simplest-pubsub-ever.git?path=com.hieki.simplest-pubsub-ever
+https://github.com/stupeak/SimplestPubSubEver.git?path=Assets/SimplestPubSubEver
 ```
 
 
@@ -19,15 +19,10 @@ https://github.com/hieki-chan/simplest-pubsub-ever.git?path=com.hieki.simplest-p
 ### Example
 
 ```C#
-using Hieki.Pubsub;
+using Stupeak.SimplestPubSubEver;
 
 ```
 
-#### Topic
-
-```C#
-Topic loadTopic = Topic.FromMessage<LoadScenePayLoadMessage>();      //sample topic to publish
-```
 
 #### Message
 
@@ -66,4 +61,10 @@ IPublisher publisher { get; set; }
 //create a message and publish to subscribers who are already subscribed to this event.
 LoadScenePayLoadMessage payload = new LoadScenePayLoadMessage(999, "Success");
 publisher.Publish(loadTopic, payload);
+```
+
+#### Topic
+
+```C#
+Topic loadTopic = Topic.FromMessage<LoadScenePayLoadMessage>();      //sample topic to publish
 ```
