@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Stupeak.SimplestPubSubEver.Sample
 {
-    internal class RuntimeTest_PubsubTest
+    internal class RuntimeTest_PubSubTest
     {
         SubscriptionBag subscriptionBag = new(1);
 
