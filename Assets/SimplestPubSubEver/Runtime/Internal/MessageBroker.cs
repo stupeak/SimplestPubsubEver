@@ -66,7 +66,7 @@ namespace Stupeak.SimplestPubSubEver
         internal static async UniTask PublishAsync<T>(T message, Channel channel, CancellationToken cancellationToken)
             where T : IMessage
         {
-           
+            await UniTask.CompletedTask;
         }
 #endif
 
