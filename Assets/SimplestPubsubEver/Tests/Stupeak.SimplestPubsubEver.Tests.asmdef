@@ -1,5 +1,5 @@
 {
-    "name": "Stupeak.SimplestPubsubEver.Tests",
+    "name": "Stupeak.SimplestPubSubEver.Tests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",

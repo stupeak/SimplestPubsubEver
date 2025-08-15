@@ -1,22 +1,22 @@
-﻿namespace Stupeak.SimplestPubsubEver
+﻿using UnityEngine;
+
+namespace Stupeak.SimplestPubSubEver
 {
     public static class PubsubExtensions
     {
-        public static void Publish<T>(this object _, Channel topic, T message)
+        public static void Publish<T>(this Component unityComponent, T message)
             where T : IMessage
         {
-            MessageBroker.Publish(message, topic);
+            MessageBroker.Publish(message, Channel.FromScene(unityComponent.gameObject.scene));
         }
 
-        public static ISubscriber Subscribe<T>(this object _,
-            CallbackMessage<T> callback,
-            Channel topic)
+        public static ISubscription Subscribe<T>(this Component unityComponent, CallbackMessage<T> callback)
             where T : IMessage
         {
             ISubscriber subscriber = new Subscriber();
-            subscriber.Subscribe(callback, topic);
+            ISubscription subscription = subscriber.Subscribe(callback, Channel.FromScene(unityComponent.gameObject.scene));
 
-            return subscriber;
+            return subscription;
         }
     }
 }

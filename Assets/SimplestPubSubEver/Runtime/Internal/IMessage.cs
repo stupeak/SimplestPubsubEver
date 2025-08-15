@@ -1,5 +1,5 @@
 ﻿
-namespace Stupeak.SimplestPubsubEver
+namespace Stupeak.SimplestPubSubEver
 {
     public interface IMessage
     {

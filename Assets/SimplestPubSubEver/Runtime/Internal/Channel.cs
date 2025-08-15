@@ -1,5 +1,7 @@
 
-namespace Stupeak.SimplestPubsubEver
+using UnityEngine.SceneManagement;
+
+namespace Stupeak.SimplestPubSubEver
 {
     public readonly struct Channel
     {
@@ -15,9 +17,9 @@ namespace Stupeak.SimplestPubsubEver
             return id;
         }
 
-        public static Channel Global()
+        public static Channel Default()
         {
-            return new Channel(0);
+            return default;
         }
 
         public static Channel FromString(string str)
@@ -33,6 +35,11 @@ namespace Stupeak.SimplestPubsubEver
         public static Channel FromType<T>()
         {
             return Channel.FromString(typeof(T).FullName);
+        }
+
+        public static Channel FromScene(Scene scene)
+        {
+            return Channel.FromString(scene.path);
         }
     }
 }
