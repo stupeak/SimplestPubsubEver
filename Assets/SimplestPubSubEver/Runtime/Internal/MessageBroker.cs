@@ -13,53 +13,53 @@ namespace Stupeak.SimplestPubSubEver
 {
     internal static class MessageBroker
     {
-        private static readonly Dictionary<Channel, Dictionary<Type, List<Delegate>>> Channels = new();
+        private static readonly Dictionary<Channel, Dictionary<Type, List<IMessageHandler>>> Channels = new();
 
-        internal static ISubscription Subscribe<T>(CallbackMessage<T> callbackMessage, Channel channel)
-            where T : IMessage
+        internal static ISubscription Subscribe<T>(IMessageHandler<T> messageHandler, Channel channel)
+             where T : IMessage
         {
-            var callbackMap = GetCallbackMap(channel);
+            var callbackMap = GetHandlerMap(channel);
             Type messageType = typeof(T);
 
-            if (callbackMap.TryGetValue(messageType, out var callbackMessages))
+            if (callbackMap.TryGetValue(messageType, out var messageHandlers))
             {
-                callbackMessages.Add(callbackMessage);
+                messageHandlers.Add(messageHandler);
             }
             else
             {
-                callbackMessages = new List<Delegate>() { callbackMessage };
-                callbackMap.Add(messageType, callbackMessages);
+                messageHandlers = new List<IMessageHandler>() { messageHandler };
+                callbackMap.Add(messageType, messageHandlers);
             }
 
-            return new Subscription<T>(callbackMessage, callbackMessages);
+            return new Subscription<T>(messageHandler, messageHandlers);
         }
 
 
         internal static void Publish<T>(T message, Channel channel)
             where T : IMessage
         {
-            var callbackMap = GetCallbackMap(channel);
+            var callbackMap = GetHandlerMap(channel);
             Type messageType = typeof(T);
 
-            if (!callbackMap.TryGetValue(messageType, out var callbackMessages))
+            if (!callbackMap.TryGetValue(messageType, out var messageHandlers))
             {
                 return;
             }
 
-            foreach (var callbackMessage in callbackMessages)
+            foreach (var callbackMessage in messageHandlers)
             {
-                ((CallbackMessage<T>)callbackMessage).Invoke(message);
+                ((IMessageHandler<T>)callbackMessage)?.Invoke(message);
             }
         }
 
-        private static Dictionary<Type, List<Delegate>> GetCallbackMap(Channel channel)
+        private static Dictionary<Type, List<IMessageHandler>> GetHandlerMap(Channel channel)
         {
-            if (!Channels.TryGetValue(channel, out var callbackMap))
+            if (!Channels.TryGetValue(channel, out var handlerMap))
             {
-                Channels.Add(channel, callbackMap = new Dictionary<Type, List<Delegate>>());
+                Channels.Add(channel, handlerMap = new Dictionary<Type, List<IMessageHandler>>());
             }
 
-            return callbackMap;
+            return handlerMap;
         }
 
 #if PUBSUB_UNITASK

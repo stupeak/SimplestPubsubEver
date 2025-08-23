@@ -1,39 +1,51 @@
-﻿using UnityEngine.Events;
+﻿using System;
+using UnityEngine.Events;
 
 namespace Stupeak.SimplestPubSubEver
 {
-    public delegate void CallbackMessage(IMessage message);
+    public delegate void CallbackMessage();
 
     public delegate void CallbackMessage<T>(T message) where T : IMessage;
 
-    public interface ICallbackMessage<T>
-        where T : IMessage
+    internal class CallbackMessageHandler<TMessage> : IMessageHandler<TMessage>
+        where TMessage : IMessage
     {
-        void Invoke(T message);
-    }
+        private readonly Delegate m_Delegate;
 
-    public class CallbackMessageHandler<T> : ICallbackMessage<T>
-        where T : IMessage
-    {
-        private readonly CallbackMessage<T> _callback;
-
-        public CallbackMessageHandler(CallbackMessage<T> callback)
+        public CallbackMessageHandler(CallbackMessage callback)
         {
-            _callback = callback;
+            m_Delegate = callback;
         }
 
-        public void Invoke(T message)
+        public CallbackMessageHandler(CallbackMessage<TMessage> callback)
         {
-            _callback?.Invoke(message);
+            m_Delegate = callback;
+        }
+
+        void IMessageHandler<TMessage>.Invoke(TMessage message)
+        {
+            if (m_Delegate is CallbackMessage callbackMessage)
+            {
+                callbackMessage?.Invoke();
+            }
+            else if (m_Delegate is CallbackMessage<TMessage> callbackMessage_T)
+            {
+                callbackMessage_T?.Invoke(message);
+            }
+            else
+            {
+                throw new InvalidOperationException("handler is invalid");
+            }
         }
     }
 
-    public class UnityCallback<T> : UnityEvent<T>, ICallbackMessage<T>
-        where T : IMessage
+
+    public class UnityMessageHandler<TMessage> : UnityEvent<TMessage>, IMessageHandler<TMessage>
+        where TMessage : IMessage
     {
-        public new void Invoke(T message)
+        void IMessageHandler<TMessage>.Invoke(TMessage message)
         {
-            base.Invoke(message);
+            this.Invoke(message);
         }
     }
 }

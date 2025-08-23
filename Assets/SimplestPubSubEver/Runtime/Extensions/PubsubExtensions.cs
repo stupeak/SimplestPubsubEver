@@ -13,7 +13,7 @@ namespace Stupeak.SimplestPubSubEver
         public static ISubscription Subscribe<T>(this Component unityComponent, CallbackMessage<T> callback)
             where T : IMessage
         {
-            ISubscriber subscriber = new Subscriber();
+            Subscriber subscriber = new();
             ISubscription subscription = subscriber.Subscribe(callback, Channel.FromScene(unityComponent.gameObject.scene));
 
             return subscription;

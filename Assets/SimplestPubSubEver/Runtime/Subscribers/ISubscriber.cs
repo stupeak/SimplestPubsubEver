@@ -2,7 +2,7 @@
 {
     public interface ISubscriber
     {
-        ISubscription Subscribe<T>(CallbackMessage<T> callbackMessage, Channel channel = default)
+        ISubscription Subscribe<T>(IMessageHandler<T> messageHandler, Channel channel = default)
             where T : IMessage;
     }
 }

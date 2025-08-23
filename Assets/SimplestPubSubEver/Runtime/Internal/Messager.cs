@@ -2,14 +2,14 @@
 {
     public static class Messager
     {
-        public static ISubscriber MessageSubscriber()
+        public static Subscriber MessageSubscriber()
         {
-            return new Subscriber();
+            return new();
         }
 
-        public static IPublisher MessagePublisher()
+        public static Publisher MessagePublisher()
         {
-            return new Publisher();
+            return new();
         }
     }
 }
