@@ -1,15 +1,12 @@
-
-using System;
-
 namespace Stupeak.SimplestPubSubEver
 {
     public readonly struct Subscriber : ISubscriber
     {
-        public ISubscription Subscribe<T>(Action callback, Channel channel = default)
-            where T : IMessage
-        {
-            return Subscribe<T>(new CallbackMessage(callback), channel);
-        }
+        //public ISubscription Subscribe<T>(Action callback, Channel channel = default)
+        //    where T : IMessage
+        //{
+        //    return Subscribe<T>(new CallbackMessage(callback), channel);
+        //}
 
         public ISubscription Subscribe<T>(CallbackMessage callback, Channel channel = default)
             where T : IMessage

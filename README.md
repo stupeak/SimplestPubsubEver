@@ -38,7 +38,7 @@ ISubscription subscription;
 
 void Awake()
 {
-    ISubscriber subscriber = Messenger.MessageSubscriber();
+    Subscriber subscriber = Messenger.MessageSubscriber();
     // or
     //Subscriber subscriber = new();
 
@@ -63,8 +63,18 @@ void Start()
     //create a message and publish to subscribers who are already subscribed to this event.
     LoadScenePayLoadMessage payload = new LoadScenePayLoadMessage(999, "Success");
 
-    IPublisher publisher = Messenger.MessagePublisher();
+    Publisher publisher = Messenger.MessagePublisher();
     publisher.Publish(payload);
+}
+```
+
+#### Notify callback
+```C#
+subscriber.Subscribe<InfoMessage>(OnNotify);
+
+void OnNotify() // message param is unnecessary
+{   
+    
 }
 ```
 
@@ -75,4 +85,20 @@ subscriber.Subscribe<Message>(() => { Debug.Log("hello world"); }, Channel.FromT
 
 publisher.Publish(new Message(), Channel.FromType<Message>());
 ```
+
+#### SubscriptionBag
+SubscriptionBag is a list of ISubscription, allowing you to unsubscribe multiple subscriptions at once.
+
+```C#
+SubscriptionBag subscriptions = new(4);
+
+subscriber.Subscribe<M1>(() => { }).AddTo(subscriptions);
+subscriber.Subscribe<M1>((m) => { }).AddTo(subscriptions);
+subscriber.Subscribe<M2>((m) => { }).AddTo(subscriptions);
+
+subscriptions?.Dispose();
+```
+
+
+### Async PubSub (UniTask)
 
