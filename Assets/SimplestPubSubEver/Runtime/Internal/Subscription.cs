@@ -9,24 +9,25 @@ namespace Stupeak.SimplestPubSubEver
     }
 
     internal sealed class Subscription<T> : ISubscription
+        where T : IMessage
     {
-        Delegate callbackMessage;
-        WeakReference<List<Delegate>> subscribedCallbacks;
+        IMessageHandler<T> m_MessageHandler;
+        WeakReference<List<IMessageHandler>> m_SubscribedCallbacks;
 
-        public Subscription(Delegate callbackMessage, List<Delegate> subscribedCallbacks)
+        public Subscription(IMessageHandler<T> messageHandler, List<IMessageHandler> subscribedCallbacks)
         {
-            this.callbackMessage = callbackMessage;
-            this.subscribedCallbacks = new(subscribedCallbacks);
+            this.m_MessageHandler = messageHandler;
+            this.m_SubscribedCallbacks = new(subscribedCallbacks);
         }
 
         public void Dispose()
         {
-            if (subscribedCallbacks.TryGetTarget(out var target))
+            if (m_SubscribedCallbacks.TryGetTarget(out var target))
             {
-                target.Remove(callbackMessage);
+                target.Remove(m_MessageHandler);
             }
 
-            callbackMessage = null;
+            m_MessageHandler = null;
         }
     }
 }
