@@ -1,3 +1,14 @@
 {
-	"name": "Stupeak.SimplestPubSubEver"
+    "name": "Stupeak.SimplestPubSubEver",
+    "rootNamespace": "Stupeak",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
